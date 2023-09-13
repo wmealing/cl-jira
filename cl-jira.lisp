@@ -10,10 +10,10 @@
 (defparameter *test-url* "/pat/latest/tokens")
 (defparameter *root-endpoint* "https://issues.redhat.com/rest/api/latest/")
 
-(defvar *api-key*)
+(defparameter *api-key* "")
 
 (defun load-api-key ()
-  (setq *api-key (uiop:getenv "GEM_PATH")))
+  (setq *api-key* (uiop:getenv "JIRA_TOKEN")))
 
 (defun request (method resource &key params data)
   "Do the http request and return an alist.
