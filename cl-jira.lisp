@@ -15,6 +15,9 @@
 (defun load-api-key ()
   (setq *api-key* (uiop:getenv "JIRA_TOKEN")))
 
+(defun set-api-key (api-key)
+  (setq *api-key* api-key))
+
 (defun request (method resource &key params data)
   "Do the http request and return an alist.
 
@@ -39,9 +42,11 @@ Example:
                                      :content data
                                      :headers headers
                                      :max-redirects 10))))
-
 (defun get-issue (issue-id &key params data)
   (request :GET (str:concat "issue/" issue-id)))
+
+(defun get-project-components (project-id)
+  (request :GET (str:concat "project/" project-id "/components")))
 
 (defun get-comments (issue-id &key params data)
   (request :GET (str:concat "issue/" issue-id "/comment")))
@@ -55,6 +60,13 @@ Example:
 (defun add-label (issue-id &key label-text)
   (let* ((label-json (build-add-label label-text)))
     (request :PUT (str:concat "issue/" issue-id ) :data (string-downcase label-json)))  )
+
+(defun get-labels (issue-data)
+  (getf (getf issue-data :|fields|) :|labels|))
+
+(defun get-weblinks (issue-id)
+  ;; https://{yourInstance}.atlassian.net/rest/api/3/issue/{issue-key}/remotelink
+  (request :GET (str:concat "issue/" issue-id "/remotelink") :data nil))
 
 (defun build-component-json (text)
   ;;  (jonathan:to-json (list :update (list :components (list (list  :set (list (list :name text)))))))
