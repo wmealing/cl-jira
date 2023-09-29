@@ -7,7 +7,6 @@
 (in-package #:cl-jira)
 
 (defparameter *domain* "redhat.com")
-(defparameter *test-url* "/pat/latest/tokens")
 (defparameter *root-endpoint* "https://issues.redhat.com/rest/api/latest/")
 
 (defparameter *api-key* "")
